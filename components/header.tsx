@@ -1,11 +1,12 @@
 "use client"
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
+import { useHeaderState } from '@/hooks/use-header-state'
+import type { NavigationItem } from '@/types/header'
 
-const navigation = [
+const navigation: NavigationItem[] = [
   { name: 'About', nameJa: '会社情報', href: '/company' },
   { name: 'Services', nameJa: '事業内容', href: '/services' },
   { name: 'Works', nameJa: '実績', href: '/works' },
@@ -14,16 +15,7 @@ const navigation = [
 ]
 
 export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const { closeMobileMenu, isMobileMenuOpen, isScrolled, toggleMobileMenu } = useHeaderState()
 
   return (
     <header
@@ -78,7 +70,7 @@ export function Header() {
           <button
             type="button"
             className="lg:hidden relative z-50 flex h-12 w-12 items-center justify-center"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={toggleMobileMenu}
             aria-label="メニューを開く"
           >
             <div className="relative h-5 w-6">
@@ -127,7 +119,7 @@ export function Header() {
                   <Link
                     href={item.href}
                     className="group flex items-baseline gap-4 py-4 border-b border-border"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={closeMobileMenu}
                   >
                     <span className="text-3xl font-bold text-foreground transition-colors group-hover:text-accent">
                       {item.name}
@@ -144,7 +136,7 @@ export function Header() {
               >
                 <Link
                   href="/contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={closeMobileMenu}
                   className="inline-flex items-center gap-3 rounded-full bg-accent px-8 py-4 text-lg font-medium text-accent-foreground"
                 >
                   <span>Contact Us</span>

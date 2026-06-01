@@ -1,10 +1,5 @@
 import { AnimatedSection } from '@/components/animated-section'
-
-interface SectionTitleProps {
-  title: string
-  subtitle?: string
-  align?: 'left' | 'center'
-}
+import type { SectionTitleProps } from '@/types/sections'
 
 export function SectionTitle({ title, subtitle, align = 'center' }: SectionTitleProps) {
   return (

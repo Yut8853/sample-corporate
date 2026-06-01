@@ -4,13 +4,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-interface CTASectionProps {
-  title: string
-  description: string
-  buttonText: string
-  buttonHref: string
-}
+import type { CTASectionProps } from '@/types/sections'
 
 export function CTASection({ title, description, buttonText, buttonHref }: CTASectionProps) {
   return (

@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, useInView } from 'framer-motion'
-import { useRef, ReactNode } from 'react'
+import { animate, motion, useInView } from 'framer-motion'
+import { useEffect, useRef, useState, ReactNode } from 'react'
 import Image from 'next/image'
 
 interface ImageRevealProps {
@@ -155,6 +155,20 @@ function Counter({ from, to, delay }: { from: number; to: number; delay: number 
 function CounterAnimation({ from, to, delay }: { from: number; to: number; delay: number }) {
   const nodeRef = useRef<HTMLSpanElement>(null)
   const isInView = useInView(nodeRef, { once: true })
+  const [count, setCount] = useState(from)
+
+  useEffect(() => {
+    if (!isInView) return
+
+    const controls = animate(from, to, {
+      duration: 2,
+      delay,
+      ease: 'easeOut',
+      onUpdate: (latest) => setCount(Math.round(latest)),
+    })
+
+    return () => controls.stop()
+  }, [delay, from, isInView, to])
   
   return (
     <motion.span
@@ -162,22 +176,7 @@ function CounterAnimation({ from, to, delay }: { from: number; to: number; delay
       initial={{ opacity: 0 }}
       animate={isInView ? { opacity: 1 } : { opacity: 0 }}
     >
-      <motion.span
-        initial={{ textContent: from }}
-        animate={isInView ? { textContent: to } : { textContent: from }}
-        transition={{
-          duration: 2,
-          delay,
-          ease: 'easeOut',
-        }}
-        onUpdate={(latest) => {
-          if (nodeRef.current) {
-            nodeRef.current.textContent = Math.round(Number(latest.textContent || 0)).toString()
-          }
-        }}
-      >
-        {from}
-      </motion.span>
+      {count}
     </motion.span>
   )
 }
